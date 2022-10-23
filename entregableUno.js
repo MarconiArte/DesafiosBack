@@ -11,11 +11,12 @@ class Usuario {
     }
 
     addMascota = (nombreMascota) => {
-        return this.mascotas.push(nombreMascota);
+        this.mascotas.push(nombreMascota);
     }
 
     countMascotas = () => {
-        return this.mascotas;
+        return this.mascotas.length;
+        
     }
 
     addBook = (titulo, autor) => {
@@ -35,9 +36,11 @@ const UsuarioUno = new Usuario("Marcos","Niz");
 const nombreCompleto = UsuarioUno.getFullName();
 console.log(`El nombre completo del usuario es ${nombreCompleto}`);
 
-const Mascotas = UsuarioUno.countMascotas();
+console.log(`El total de las mascotas es de ${UsuarioUno.countMascotas()}`);
 UsuarioUno.addMascota("Luna");
-console.log(`El total de las mascotas es de ${Mascotas.length}`)
+UsuarioUno.addMascota("Sol");
+console.log(`El total de las mascotas es de ${UsuarioUno.countMascotas()}`);
+
 
 
 UsuarioUno.addBook("El cielo del apocalipsis","Desconocido");
