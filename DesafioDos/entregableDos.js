@@ -1,5 +1,4 @@
 const fs = require('fs');
-const { json } = require('stream/consumers');
 
 class Contenedor {
     constructor(nombreArchivo){
@@ -14,7 +13,7 @@ class Contenedor {
 
         let archivoExtraido = this.getAll();
 
-        if (archivoExtraido == []){
+        if (archivoExtraido.length == 0){
             newId = 1
         }else{
             newId = archivoExtraido[archivoExtraido.length-1].id + 1
@@ -29,8 +28,19 @@ class Contenedor {
         return newId;
     }
 
-    getById = async (objetId) => {}
-
+    getById = async (objectId) => {
+        let indice
+        let array = await this.getAll()
+        for(let i=0; i<array.length; i++ ){
+            if(array[i].id == objectId){
+                 indice = i
+            }
+        }
+         array.splice(indice,1)
+         array = JSON.stringify(array, null, '\t')
+         await fs.promises.writeFile(`${this.nombreArchivo}.json`, array)
+    }
+       
     getAll = async () => {
         let archivoExtraido = []
 
@@ -44,6 +54,23 @@ class Contenedor {
 
     deleteById = () => {}
 
-    deteleAll = () => {}
+    deleteAll = async () => {
+        if(fs.existsSync(`./${this.nombreArchivo}.json`)){
+            await fs.promises.unlink(`${this.nombreArchivo}.json`)
+        }
+    }
 }
 
+//Llamada de los metodos con un objeto creado
+
+const objeto = new Contenedor('archivodeprueba')
+
+ objeto.saveObjet({
+    nombre: 'Heladera',
+    precio: 25000,
+    marca: 'samsung'
+}) .then(response => console.log(response))
+
+objeto.getById(1) .then(response => console.log(response))
+
+objeto.getAll().then(response => console.log(response))
